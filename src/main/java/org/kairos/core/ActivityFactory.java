@@ -32,7 +32,7 @@ public class ActivityFactory extends Context {
     public void startActivity(Intent intent) {
         try {
             Activity activityInstance = (Activity) intent.activity.newInstance();
-            activityInstance.context = this;
+            activityInstance.mBase = this;
             activityInstance.intent=intent;
             activityInstance.onCreate();
             this.window.add(activityInstance);

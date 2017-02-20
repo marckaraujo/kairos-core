@@ -24,6 +24,10 @@ public class Activity extends ContextWrapper {
 
     protected int state = INITIALIZING;
 
+    public Activity(Context base) {
+        super(base);
+    }
+
     /**
      * Called when the activity is starting, This is where most initialization should go: calling setContentView(URL) to
      * inflate the activity's UI
@@ -86,7 +90,7 @@ public class Activity extends ContextWrapper {
         FXMLLoader loader = new FXMLLoader(content);
         loader.setController(this);
         try {
-            this.context.window.setContentView(loader.load());
+            this.mBase.window.setContentView(loader.load());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -90,7 +90,7 @@ public class BackStackRecord extends FragmentTransaction {
     }
 
     private void transaction(Op op) {
-        Pane nodeHost = (Pane) fm.activityHost.context.window.getDecorView().lookup("#" + op.fragment.containerId);
+        Pane nodeHost = (Pane) fm.activityHost.mBase.window.getDecorView().lookup("#" + op.fragment.containerId);
         if (op.cmd == ADD) {
             nodeHost.getChildren().add(op.fragment);
             FXMLLoader loader = new FXMLLoader();

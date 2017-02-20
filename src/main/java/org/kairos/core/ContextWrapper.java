@@ -3,16 +3,25 @@ package org.kairos.core;
 
 public class ContextWrapper extends Context {
 
-    protected Context context;
+    protected Context mBase;
     protected Intent intent;
+    
+    public ContextWrapper(Context base) {
+        this.mBase = base;
+    }
+    
+    public Context getBaseContext() {
+        return mBase;
+    }     
+    
     @Override
     public void startActivity(Class<? extends Activity> activity) {
-        context.startActivity(activity);
+        mBase.startActivity(activity);
     }
 
     @Override
     public void startActivity(Intent intent) {
-        context.startActivity(intent);
+        mBase.startActivity(intent);
     }
 
     public Intent getIntent() {
@@ -21,7 +30,7 @@ public class ContextWrapper extends Context {
 
     @Override
     public void onBackPressed() {
-        context.onBackPressed();
+        mBase.onBackPressed();
     }
 
 
