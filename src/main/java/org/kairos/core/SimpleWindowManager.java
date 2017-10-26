@@ -1,7 +1,9 @@
 package org.kairos.core;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Region;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -35,7 +37,7 @@ public class SimpleWindowManager extends WindowManager {
     public void setContentView(Node content) {
         super.setContentView(content);
         if(content instanceof Region) {
-            checkChangeSize(((Region) content).getPrefWidth(), ((Region) content).getPrefHeight());
+            show();
         }
     }
 
@@ -53,21 +55,15 @@ public class SimpleWindowManager extends WindowManager {
             tail.prev.activity.onStart();
         }
         tail.activity.onStop();
-        checkChangeSize(((Region) tail.prev.content).getPrefWidth(), ((Region) tail.prev.content).getPrefHeight());
+        show();
         return super.back();
 
     }
 
 
 
-    private void checkChangeSize(double width,double height){
-        if(width!=window.getWidth() || height!=window.getHeight()){
-            window.hide();
-            window.setWidth(width);
-            window.setHeight(height);
-            window.centerOnScreen();
-            ((Stage)window).show();
-        }
-
+    private void show(){
+        window.hide();
+        ((Stage)window).show();
     }
 }
