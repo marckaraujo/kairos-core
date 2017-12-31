@@ -4,6 +4,11 @@ import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 import java.net.URL;
+import javafx.collections.ObservableList;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 /**
  * An activity is a single, focused thing that the user can do. Almost all activities interact with the user, so the
@@ -16,17 +21,15 @@ public class Activity extends ContextWrapper {
     static protected final int STOPPED = 2;
     static protected final int STARTED = 3;
     static protected final int RESUMED = 4;
-
+    
+    protected boolean maximized = false;
+    protected BoundingBox savedBounds;
     protected FragmentManagerImpl fragmentManager;
     protected ActionBar actionBar;
     private boolean homeAsUp=false;
 
 
     protected int state = INITIALIZING;
-
-    public Activity(Context base) {
-        super(base);
-    }
 
     /**
      * Called when the activity is starting, This is where most initialization should go: calling setContentView(URL) to
@@ -110,6 +113,39 @@ public class Activity extends ContextWrapper {
      */
     public ActionBar getActionBar() {
         return actionBar;
+    }
+    
+    /**
+     * Retrieve a reference to this activity's ActionBar
+     * @param stage 
+     * @return
+     */
+    public boolean maximizeOrRestore(Stage stage) {
+        if (maximized) {
+            restoreSavedBounds(stage);
+            maximized = false;
+        } else {
+            ObservableList<Screen> screensForRectangle = Screen.getScreensForRectangle(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
+            Screen screen = screensForRectangle.get(0);
+            Rectangle2D visualBounds = screen.getVisualBounds();
+
+            savedBounds = new BoundingBox(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
+
+            stage.setX(visualBounds.getMinX() - 8);
+            stage.setY(visualBounds.getMinY() - 8);
+            stage.setWidth(visualBounds.getWidth() + 16);
+            stage.setHeight(visualBounds.getHeight() + 16);
+            maximized = true;
+        }
+        return maximized;
+    }
+    
+    protected void restoreSavedBounds(Stage stage) {
+        stage.setX(savedBounds.getMinX());
+        stage.setY(savedBounds.getMinY());
+        stage.setWidth(savedBounds.getWidth());
+        stage.setHeight(savedBounds.getHeight());
+        savedBounds = null;
     }
 
     /**

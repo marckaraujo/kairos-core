@@ -6,10 +6,6 @@ public class ContextWrapper extends Context {
     protected Context mBase;
     protected Intent intent;
     
-    public ContextWrapper(Context base) {
-        this.mBase = base;
-    }
-    
     public Context getBaseContext() {
         return mBase;
     }     
